@@ -30,9 +30,10 @@
     valueLabel.backgroundColor = [UIColor lightGrayColor];
     [self.view addSubview:valueLabel];
 	
-    SMRotaryWheel *wheel = [[SMRotaryWheel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)  
-                                                    andDelegate:self 
-                                                   withSections:8];
+    SMRotaryWheel *wheel = [[SMRotaryWheel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    wheel.delegate = self;
+    wheel.dataSource = self;
+    [wheel reloadData];
     
     wheel.center = CGPointMake(160, 240);
     [self.view addSubview:wheel];
@@ -40,6 +41,8 @@
     
     
 }
+
+#pragma mark - Wheel delegate
 
 - (void)wheel:(SMRotaryWheel *)wheel didSelectValueAtIndex:(NSUInteger)newValue
 {
@@ -49,6 +52,21 @@
 - (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel
 {
     
+}
+
+#pragma mark - Wheel dataSource
+
+- (NSUInteger)numberOfSlicesInWheel:(SMRotaryWheel *)wheel
+{
+    return 8;
+}
+
+- (UIView *)wheel:(SMRotaryWheel *)wheel viewForSliceAtIndex:(NSUInteger)index
+{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    label.backgroundColor = [UIColor blueColor];
+    label.text = [NSString stringWithFormat:@"%d", index];
+    return label;
 }
 
 

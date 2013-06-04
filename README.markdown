@@ -1,4 +1,5 @@
-This is the project created during the tutorial "How To Create a Rotating Wheel Control with UIKit" published here: http://www.raywenderlich.com/9864/how-to-create-a-rotating-wheel-control-with-uikit
+# SMRotaryWheel
+This code is based on the project created during the tutorial "How To Create a Rotating Wheel Control with UIKit" published on the post [http://www.raywenderlich.com/9864/how-to-create-a-rotating-wheel-control-with-uikit](http://www.raywenderlich.com/9864/how-to-create-a-rotating-wheel-control-with-uikit)
 
 Here is a screenshot of the final result
 
@@ -6,7 +7,3 @@ Here is a screenshot of the final result
 
 In case you want to use this code in your projects, you can.
 Just check out the license.txt file for attribution.
-
-This project extends a UIComponent.
-A version extending UIView is available at:
-https://github.com/funkyboy/How-To-Create-a-Rotating-Wheel-Control-with-UIKit-UIView-Version

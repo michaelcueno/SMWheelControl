@@ -14,9 +14,8 @@
 static CGFloat kDeltaAngle;
 static CGFloat kMinAlphaValue = 0.6;
 static CGFloat kMaxAlphaValue = 1.0;
-static CGFloat MIN_VELOCITY = 10.0;
-static CGFloat MAX_VELOCITY = 2000.0;
-static CGFloat DECELERATION_RATE = 0.97;
+static CGFloat kMaxVelocity = 2000.0;
+static CGFloat kDecelerationRate = 0.97;
 
 @implementation SMRotaryWheel {
     BOOL _decelerating;
@@ -27,52 +26,51 @@ static CGFloat DECELERATION_RATE = 0.97;
     CGFloat _angleChange;
 }
 
-- (id) initWithFrame:(CGRect)frame andDelegate:(id)del withSections:(int)sectionsNumber
+- (id) initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
 		
         self.currentValue = 0;
-        self.numberOfSections = sectionsNumber;
-        self.delegate = del;
+        [self clearWheel];
 		[self drawWheel];
         
 	}
     return self;
 }
 
+- (void)clearWheel
+{
+    for (UIView *subview in self.container.subviews) {
+        [subview removeFromSuperview];
+    }
+}
 
 - (void) drawWheel
 {
     self.container = [[UIView alloc] initWithFrame:self.frame];
-        
-    CGFloat angleSize = 2 * M_PI / self.numberOfSections;
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+
+    CGFloat angleSize = 2 * M_PI / numberOfSlices;
     
-    for (int i = 0; i < self.numberOfSections; i++) {
+    for (int i = 0; i < numberOfSlices; i++) {
         
-        UIImageView *im = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"segment.png"]];
-        
-        im.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
-        im.layer.position = CGPointMake(self.container.bounds.size.width / 2.0 - self.container.frame.origin.x,
+        UIView *sliceView = [self.dataSource wheel:self viewForSliceAtIndex:i];
+        sliceView.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
+        sliceView.layer.position = CGPointMake(self.container.bounds.size.width / 2.0 - self.container.frame.origin.x,
                                         self.container.bounds.size.height / 2.0 - self.container.frame.origin.y);
-        im.transform = CGAffineTransformMakeRotation(angleSize*i);
-        im.alpha = kMinAlphaValue;
-        im.tag = i;
+        sliceView.transform = CGAffineTransformMakeRotation(angleSize * i);
+        sliceView.alpha = kMinAlphaValue;
+        sliceView.tag = i;
         
         if (i == 0) {
-            im.alpha = kMaxAlphaValue;
+            sliceView.alpha = kMaxAlphaValue;
         }
-        
-        UIImageView *cloveImage = [[UIImageView alloc] initWithFrame:CGRectMake(12, 15, 40, 40)];
-        cloveImage.image = [UIImage imageNamed:[NSString stringWithFormat:@"icon%i.png", i]];
-        [im addSubview:cloveImage];
-        
-        [self.container addSubview:im];
+
+        [self.container addSubview:sliceView];
     }
     
     self.container.userInteractionEnabled = NO;
     [self addSubview:self.container];
-
-    self.cloves = [NSMutableArray arrayWithCapacity:self.numberOfSections];
     
     UIImageView *bg = [[UIImageView alloc] initWithFrame:self.frame];
     bg.image = [UIImage imageNamed:@"bg.png"];
@@ -84,7 +82,7 @@ static CGFloat DECELERATION_RATE = 0.97;
     mask.center = CGPointMake(mask.center.x, mask.center.y+3);
     [self addSubview:mask];
     
-    if (self.numberOfSections % 2 == 0) {
+    if (numberOfSlices % 2 == 0) {
         [self buildClovesEven];
     } else {
         [self buildClovesOdd];
@@ -113,11 +111,13 @@ static CGFloat DECELERATION_RATE = 0.97;
 
 
 - (void) buildClovesEven
-{    
-    CGFloat fanWidth = M_PI * 2 / self.numberOfSections;
+{
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+
+    CGFloat fanWidth = M_PI * 2 / numberOfSlices;
     CGFloat mid = 0;
     
-    for (int i = 0; i < self.numberOfSections; i++) {
+    for (int i = 0; i < numberOfSlices; i++) {
         
         SMClove *clove = [[SMClove alloc] init];
         clove.midValue = mid;
@@ -139,7 +139,7 @@ static CGFloat DECELERATION_RATE = 0.97;
         
         NSLog(@"cl is %@", clove);
         
-        [self.cloves addObject:clove];
+        // [self.cloves addObject:clove];
         
     }
     
@@ -147,11 +147,13 @@ static CGFloat DECELERATION_RATE = 0.97;
 
 
 - (void) buildClovesOdd
-{    
-    CGFloat fanWidth = M_PI * 2 / self.numberOfSections;
+{
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+
+    CGFloat fanWidth = M_PI * 2 / numberOfSlices;
     CGFloat mid = 0;
     
-    for (int i = 0; i < self.numberOfSections; i++) {
+    for (int i = 0; i < numberOfSlices; i++) {
         
         SMClove *clove = [[SMClove alloc] init];
         clove.midValue = mid;
@@ -169,7 +171,7 @@ static CGFloat DECELERATION_RATE = 0.97;
         }
         
                 
-        [self.cloves addObject:clove];
+        //[self.cloves addObject:clove];
         
         NSLog(@"cl is %@", clove);
     }
@@ -278,13 +280,13 @@ static CGFloat DECELERATION_RATE = 0.97;
 
 #pragma mark - Positioning
 
-- (void)snipToNearestClove
+- (void)snapToNearestClove
 {
-    
     CGFloat radians = atan2f(self.container.transform.b, self.container.transform.a);
 
     CGFloat newVal = 0.0;
 
+    /*
     for (SMClove *c in self.cloves) {
 
         if (c.minValue > 0 && c.maxValue < 0) { // anomalous case
@@ -305,6 +307,7 @@ static CGFloat DECELERATION_RATE = 0.97;
             self.currentValue = c.value;
         }
     }
+    */
     
     [UIView animateWithDuration:0.2
                           delay:0.0
@@ -342,7 +345,7 @@ static CGFloat DECELERATION_RATE = 0.97;
 
 -(void)decelerationStep
 {
-    CGFloat newVelocity = _animatingVelocity * DECELERATION_RATE;
+    CGFloat newVelocity = _animatingVelocity * kDecelerationRate;
 
 #warning reimplement angle
     CGFloat angle = _animatingVelocity / 60.0;
@@ -363,7 +366,7 @@ static CGFloat DECELERATION_RATE = 0.97;
 
 -(void)endDeceleration
 {
-    [self snipToNearestClove];
+    [self snapToNearestClove];
     
     _decelerating = NO;
     [_displayLink invalidate], _displayLink = nil;
@@ -385,10 +388,16 @@ static CGFloat DECELERATION_RATE = 0.97;
         velocity = _angleChange / (_endTouchTime - _startTouchTime);
     }
 
-    if (velocity > MAX_VELOCITY) {velocity = MAX_VELOCITY;}
-    else if (velocity < -MAX_VELOCITY) {velocity = -MAX_VELOCITY;}
+    if (velocity > kMaxVelocity) {velocity = kMaxVelocity;}
+    else if (velocity < -kMaxVelocity) {velocity = -kMaxVelocity;}
 
     return velocity;
+}
+
+- (void)reloadData
+{
+    [self clearWheel];
+    [self drawWheel];
 }
 
 @end

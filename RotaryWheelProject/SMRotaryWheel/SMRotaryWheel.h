@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SMRotaryProtocol.h"
+#import "SMRotaryDataSource.h"
 
 @protocol SMRotaryDataSource;
 
@@ -17,13 +18,10 @@
 @property (nonatomic, weak) id <SMRotaryDataSource> dataSource;
 
 @property (nonatomic, strong) UIView *container;
-@property int numberOfSections;
-@property CGAffineTransform startTransform;
-@property (nonatomic, strong) NSMutableArray *cloves;
 @property int currentValue;
+@property CGAffineTransform startTransform;
 
-
-- (id) initWithFrame:(CGRect)frame andDelegate:(id)del withSections:(int)sectionsNumber;
-
+- (id)initWithFrame:(CGRect)frame;
+- (void)reloadData;
 
 @end

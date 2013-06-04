@@ -11,6 +11,7 @@
 
 @protocol SMRotaryDataSource <NSObject>
 
-- (void)wheel:(SMRotaryWheel *)wheel viewForRowAtIndex:(NSUInteger)index;
+- (UIView *)wheel:(SMRotaryWheel *)wheel viewForSliceAtIndex:(NSUInteger)index;
+- (NSUInteger)numberOfSlicesInWheel:(SMRotaryWheel *)wheel;
 
 @end
