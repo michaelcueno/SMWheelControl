@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class SMRotaryWheel;
+
 @protocol SMRotaryProtocol <NSObject>
 
-- (void) wheelDidChangeValue:(NSString *)newValue;
+- (void)wheel:(SMRotaryWheel *)wheel didSelectValueAtIndex:(NSUInteger)index;
+- (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel;
+- (void)wheel:(SMRotaryWheel *)wheel didRotateByAngle:(CGFloat)angle;
 
 @end

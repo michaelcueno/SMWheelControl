@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EE4488078C7CF20B250A055 /* SMClove.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE44C9C0E6816AD0861E621 /* SMClove.m */; };
+		2EE44BC1B4E1519D660481C6 /* SMRotaryWheel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE449532D9760D7F5610652 /* SMRotaryWheel.m */; };
 		BD683C5E14EAB964005EF069 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5314EAB964005EF069 /* bg.png */; };
 		BD683C5F14EAB964005EF069 /* centerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5414EAB964005EF069 /* centerButton.png */; };
 		BD683C6014EAB964005EF069 /* icon0.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5514EAB964005EF069 /* icon0.png */; };
@@ -18,7 +20,6 @@
 		BD683C6614EAB964005EF069 /* icon6.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5B14EAB964005EF069 /* icon6.png */; };
 		BD683C6714EAB964005EF069 /* icon7.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5C14EAB964005EF069 /* icon7.png */; };
 		BD683C6814EAB964005EF069 /* segment.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5D14EAB964005EF069 /* segment.png */; };
-		BDD8AD3614EA8A1B002425D6 /* SMCLove.m in Sources */ = {isa = PBXBuildFile; fileRef = BDD8AD3514EA8A1B002425D6 /* SMCLove.m */; };
 		BDF438A114E5638700A27135 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF438A014E5638700A27135 /* UIKit.framework */; };
 		BDF438A314E5638700A27135 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF438A214E5638700A27135 /* Foundation.framework */; };
 		BDF438A514E5638700A27135 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF438A414E5638700A27135 /* CoreGraphics.framework */; };
@@ -27,11 +28,16 @@
 		BDF438B114E5638700A27135 /* SMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF438B014E5638700A27135 /* SMAppDelegate.m */; };
 		BDF438B414E5638700A27135 /* SMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF438B314E5638700A27135 /* SMViewController.m */; };
 		BDF438B714E5638700A27135 /* SMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDF438B514E5638700A27135 /* SMViewController.xib */; };
-		BDF438BF14E5641000A27135 /* SMRotaryWheel.m in Sources */ = {isa = PBXBuildFile; fileRef = BDF438BE14E5641000A27135 /* SMRotaryWheel.m */; };
 		BDF438C614E572EB00A27135 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDF438C514E572EB00A27135 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2EE441E098AEF0AE7795514D /* SMRotaryWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryWheel.h; sourceTree = "<group>"; };
+		2EE4443ECBEEBE7291FED898 /* SMRotaryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryProtocol.h; sourceTree = "<group>"; };
+		2EE447651337879D5C39606B /* SMRotaryDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryDataSource.h; sourceTree = "<group>"; };
+		2EE449532D9760D7F5610652 /* SMRotaryWheel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMRotaryWheel.m; sourceTree = "<group>"; };
+		2EE44BF360C6C214B3C1FF3E /* SMClove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMClove.h; sourceTree = "<group>"; };
+		2EE44C9C0E6816AD0861E621 /* SMClove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMClove.m; sourceTree = "<group>"; };
 		BD683C5314EAB964005EF069 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		BD683C5414EAB964005EF069 /* centerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerButton.png; sourceTree = "<group>"; };
 		BD683C5514EAB964005EF069 /* icon0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon0.png; sourceTree = "<group>"; };
@@ -43,8 +49,6 @@
 		BD683C5B14EAB964005EF069 /* icon6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon6.png; sourceTree = "<group>"; };
 		BD683C5C14EAB964005EF069 /* icon7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon7.png; sourceTree = "<group>"; };
 		BD683C5D14EAB964005EF069 /* segment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = segment.png; sourceTree = "<group>"; };
-		BDD8AD3414EA8A1B002425D6 /* SMCLove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMCLove.h; sourceTree = "<group>"; };
-		BDD8AD3514EA8A1B002425D6 /* SMCLove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMCLove.m; sourceTree = "<group>"; };
 		BDF4389C14E5638700A27135 /* RotaryWheelProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RotaryWheelProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDF438A014E5638700A27135 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BDF438A214E5638700A27135 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -58,9 +62,6 @@
 		BDF438B214E5638700A27135 /* SMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMViewController.h; sourceTree = "<group>"; };
 		BDF438B314E5638700A27135 /* SMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMViewController.m; sourceTree = "<group>"; };
 		BDF438B614E5638700A27135 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SMViewController.xib; sourceTree = "<group>"; };
-		BDF438BD14E5641000A27135 /* SMRotaryWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryWheel.h; sourceTree = "<group>"; };
-		BDF438BE14E5641000A27135 /* SMRotaryWheel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMRotaryWheel.m; sourceTree = "<group>"; };
-		BDF438C414E56B4B00A27135 /* SMRotaryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryProtocol.h; sourceTree = "<group>"; };
 		BDF438C514E572EB00A27135 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -79,6 +80,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EE4462B12641DBEBAAEF3D2 /* SMRotaryWheel */ = {
+			isa = PBXGroup;
+			children = (
+				2EE447651337879D5C39606B /* SMRotaryDataSource.h */,
+				2EE449532D9760D7F5610652 /* SMRotaryWheel.m */,
+				2EE441E098AEF0AE7795514D /* SMRotaryWheel.h */,
+				2EE4443ECBEEBE7291FED898 /* SMRotaryProtocol.h */,
+				2EE44BF360C6C214B3C1FF3E /* SMClove.h */,
+				2EE44C9C0E6816AD0861E621 /* SMClove.m */,
+			);
+			path = SMRotaryWheel;
+			sourceTree = "<group>";
+		};
 		BD683C5214EAB964005EF069 /* assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,12 +148,8 @@
 				BDF438B214E5638700A27135 /* SMViewController.h */,
 				BDF438B314E5638700A27135 /* SMViewController.m */,
 				BDF438B514E5638700A27135 /* SMViewController.xib */,
-				BDF438BD14E5641000A27135 /* SMRotaryWheel.h */,
-				BDF438BE14E5641000A27135 /* SMRotaryWheel.m */,
 				BDF438A714E5638700A27135 /* Supporting Files */,
-				BDF438C414E56B4B00A27135 /* SMRotaryProtocol.h */,
-				BDD8AD3414EA8A1B002425D6 /* SMCLove.h */,
-				BDD8AD3514EA8A1B002425D6 /* SMCLove.m */,
+				2EE4462B12641DBEBAAEF3D2 /* SMRotaryWheel */,
 			);
 			path = RotaryWheelProject;
 			sourceTree = "<group>";
@@ -181,7 +191,7 @@
 		BDF4389314E5638700A27135 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = BDF4389614E5638700A27135 /* Build configuration list for PBXProject "RotaryWheelProject" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -231,8 +241,8 @@
 				BDF438AD14E5638700A27135 /* main.m in Sources */,
 				BDF438B114E5638700A27135 /* SMAppDelegate.m in Sources */,
 				BDF438B414E5638700A27135 /* SMViewController.m in Sources */,
-				BDF438BF14E5641000A27135 /* SMRotaryWheel.m in Sources */,
-				BDD8AD3614EA8A1B002425D6 /* SMCLove.m in Sources */,
+				2EE44BC1B4E1519D660481C6 /* SMRotaryWheel.m in Sources */,
+				2EE4488078C7CF20B250A055 /* SMClove.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +274,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -277,6 +291,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
@@ -289,12 +304,17 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";

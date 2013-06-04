@@ -41,9 +41,13 @@
     
 }
 
-- (void) wheelDidChangeValue:(NSString *)newValue {
+- (void)wheel:(SMRotaryWheel *)wheel didSelectValueAtIndex:(NSUInteger)newValue
+{
+    self.valueLabel.text = @"1";
+}
 
-    self.valueLabel.text = newValue;
+- (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel
+{
     
 }
 

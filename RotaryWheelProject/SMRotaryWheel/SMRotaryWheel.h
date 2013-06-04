@@ -9,9 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "SMRotaryProtocol.h"
 
+@protocol SMRotaryDataSource;
+
 @interface SMRotaryWheel : UIControl
 
-@property (weak) id <SMRotaryProtocol> delegate;
+@property (nonatomic, weak) id <SMRotaryProtocol> delegate;
+@property (nonatomic, weak) id <SMRotaryDataSource> dataSource;
+
 @property (nonatomic, strong) UIView *container;
 @property int numberOfSections;
 @property CGAffineTransform startTransform;

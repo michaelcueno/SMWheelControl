@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 studiomagnolia.com. All rights reserved.
 
 
-#import "SMCLove.h"
+#import "SMClove.h"
 
 @implementation SMClove
 
