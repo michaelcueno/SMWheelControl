@@ -136,13 +136,11 @@ static CGFloat kDecelerationRate = 0.97;
         
         mid -= fanWidth;
         
-        
         NSLog(@"cl is %@", clove);
         
         // [self.cloves addObject:clove];
         
-    }
-    
+    }    
 }
 
 
@@ -269,12 +267,10 @@ static CGFloat kDecelerationRate = 0.97;
 
 - (void)endTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event
 {
-
     UIImageView *im = [self getCloveByValue:self.currentValue];
     im.alpha = kMaxAlphaValue;
 
     [self beginDeceleration];
-    
 }
 
 
@@ -283,37 +279,16 @@ static CGFloat kDecelerationRate = 0.97;
 - (void)snapToNearestClove
 {
     CGFloat radians = atan2f(self.container.transform.b, self.container.transform.a);
-
-    CGFloat newVal = 0.0;
-
-    /*
-    for (SMClove *c in self.cloves) {
-
-        if (c.minValue > 0 && c.maxValue < 0) { // anomalous case
-
-            if (c.maxValue > radians || c.minValue < radians) {
-
-                if (radians > 0) { // we are in the positive quadrant
-                    newVal = radians - M_PI;
-                } else { // we are in the negative one
-                    newVal = M_PI + radians;
-                }
-                self.currentValue = c.value;
-            }
-        }
-
-        else if (radians > c.minValue && radians < c.maxValue) {
-            newVal = radians - c.midValue;
-            self.currentValue = c.value;
-        }
-    }
-    */
     
-    [UIView animateWithDuration:0.2
+    double radiansPerSlice = 2.0 * M_PI / (float)[self.dataSource numberOfSlicesInWheel:self];
+    int closestSlice = round(radians / radiansPerSlice);
+    double snappedRadians = (double)closestSlice * radiansPerSlice;
+    
+    [UIView animateWithDuration:(snappedRadians - radians) / 0.1
                           delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationCurveEaseOut
+                        options:UIViewAnimationOptionCurveEaseOut
                      animations:^{
-                         CGAffineTransform t = CGAffineTransformRotate(self.container.transform, -newVal);
+                         CGAffineTransform t = CGAffineTransformMakeRotation(snappedRadians);
                          self.container.transform = t;
                      }
                      completion:^(BOOL finished) {
@@ -346,16 +321,15 @@ static CGFloat kDecelerationRate = 0.97;
 -(void)decelerationStep
 {
     CGFloat newVelocity = _animatingVelocity * kDecelerationRate;
-
-#warning reimplement angle
+    
     CGFloat angle = _animatingVelocity / 60.0;
 
-    if (newVelocity <= 0.0001 && newVelocity >= -0.0001) {
+    if (newVelocity <= 0.1 && newVelocity >= -0.1) {
         [self endDeceleration];
     } else {
         _animatingVelocity = newVelocity;
         
-        self.container.transform = CGAffineTransformRotate(self.startTransform, angle);
+        self.container.transform = CGAffineTransformRotate(self.container.transform, -angle);
         
         if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
             [self.delegate wheel:self didRotateByAngle:angle];
@@ -366,10 +340,10 @@ static CGFloat kDecelerationRate = 0.97;
 
 -(void)endDeceleration
 {
-    [self snapToNearestClove];
-    
     _decelerating = NO;
     [_displayLink invalidate], _displayLink = nil;
+    
+    [self snapToNearestClove];
 
     if ([self.delegate respondsToSelector:@selector(wheelDidEndDecelerating:)]) {
         [self.delegate wheelDidEndDecelerating:self];
@@ -385,7 +359,7 @@ static CGFloat kDecelerationRate = 0.97;
 
     // Speed = distance/time (degrees/seconds)
     if (_startTouchTime != _endTouchTime) {
-        velocity = _angleChange / (_endTouchTime - _startTouchTime);
+        velocity = _angleChange / (_endTouchTime - _startTouchTime) / 10.0;
     }
 
     if (velocity > kMaxVelocity) {velocity = kMaxVelocity;}
