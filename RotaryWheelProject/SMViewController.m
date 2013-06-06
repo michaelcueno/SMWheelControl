@@ -7,11 +7,11 @@
 //
 
 #import "SMViewController.h"
-#import "SMRotaryWheel.h"
+#import "SMWheelControl.h"
 
 @interface SMViewController()
 
-@property (nonatomic, weak) SMRotaryWheel *wheel;
+@property (nonatomic, weak) SMWheelControl *wheel;
 
 @end
 
@@ -29,7 +29,7 @@
 {
     [super viewDidLoad];
 	
-    SMRotaryWheel *wheel = [[SMRotaryWheel alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+    SMWheelControl *wheel = [[SMWheelControl alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
     [wheel addTarget:self action:@selector(wheelDidChangeValue:) forControlEvents:UIControlEventValueChanged];
     wheel.delegate = self;
     wheel.dataSource = self;
@@ -41,24 +41,24 @@
 
 #pragma mark - Wheel delegate
 
-- (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel
+- (void)wheelDidEndDecelerating:(SMWheelControl *)wheel
 {
     
 }
 
-- (void)wheel:(SMRotaryWheel *)wheel didRotateByAngle:(CGFloat)angle
+- (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle
 {
     
 }
 
 #pragma mark - Wheel dataSource
 
-- (NSUInteger)numberOfSlicesInWheel:(SMRotaryWheel *)wheel
+- (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel
 {
     return 10;
 }
 
-- (UIView *)wheel:(SMRotaryWheel *)wheel viewForSliceAtIndex:(NSUInteger)index
+- (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index
 {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 30)];
     label.backgroundColor = [UIColor whiteColor];

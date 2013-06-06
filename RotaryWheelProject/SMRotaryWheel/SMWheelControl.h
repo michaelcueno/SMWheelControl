@@ -1,5 +1,5 @@
 //
-//  SMRotaryWheel.h
+//  SMWheelControl.h
 //  RotaryWheelProject
 //
 //  Created by cesarerocchi on 2/10/12.
@@ -7,10 +7,10 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SMRotaryProtocol.h"
-#import "SMRotaryDataSource.h"
+#import "SMWheelControlDelegate.h"
+#import "SMWheelControlDataSource.h"
 
-@protocol SMRotaryDataSource;
+@protocol SMWheelControlDataSource;
 
 static const CGFloat kMinDistanceFromCenter = 40.0;
 static const CGFloat kMaxVelocity = 2000.0;
@@ -18,10 +18,10 @@ static const CGFloat kDecelerationRate = 0.97;
 static const CGFloat kMinDeceleration = 0.1;
 static const float kVelocityCoefficient = 10.0;
 
-@interface SMRotaryWheel : UIControl
+@interface SMWheelControl : UIControl
 
-@property (nonatomic, weak) id <SMRotaryProtocol> delegate;
-@property (nonatomic, weak) id <SMRotaryDataSource> dataSource;
+@property (nonatomic, weak) id <SMWheelControlDelegate> delegate;
+@property (nonatomic, weak) id <SMWheelControlDataSource> dataSource;
 @property (nonatomic, assign, readonly) int selectedIndex;
 
 - (id)initWithFrame:(CGRect)frame;

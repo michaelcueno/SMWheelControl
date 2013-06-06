@@ -1,23 +1,23 @@
 //
-//  SMRotaryWheel.m
+//  SMWheelControl.m
 //  RotaryWheelProject
 //
 //  Created by cesarerocchi on 2/10/12.
 //  Copyright (c) 2012 studiomagnolia.com. All rights reserved.
 
 
-#import "SMRotaryWheel.h"
+#import "SMWheelControl.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SMRotaryDataSource.h"
+#import "SMWheelControlDataSource.h"
 
-@interface SMRotaryWheel()
+@interface SMWheelControl ()
 
 @property (nonatomic, strong) UIView *container;
 @property (nonatomic, assign) int selectedIndex;
 
 @end
 
-@implementation SMRotaryWheel {
+@implementation SMWheelControl {
     BOOL _decelerating;
     CGFloat _animatingVelocity;
     CADisplayLink *_displayLink;

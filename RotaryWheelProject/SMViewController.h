@@ -7,9 +7,9 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SMRotaryWheel.h"
+#import "SMWheelControl.h"
 
-@interface SMViewController : UIViewController<SMRotaryProtocol, SMRotaryDataSource>
+@interface SMViewController : UIViewController<SMWheelControlDelegate, SMWheelControlDataSource>
 
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
 
