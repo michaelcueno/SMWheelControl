@@ -23,9 +23,11 @@
     CADisplayLink *_displayLink;
     CFTimeInterval _startTouchTime;
     CFTimeInterval _endTouchTime;
-    CGFloat _angleChange;
-    CGAffineTransform _startTransform;
-    CGFloat _deltaAngle;
+    CGFloat _angleDelta;
+    CGAffineTransform _initialTransform;
+    CGFloat _initialAngle;
+    CGFloat _previousAngle;
+    CGFloat _currentAngle;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -94,13 +96,13 @@
     }
 
     _startTouchTime = _endTouchTime = CACurrentMediaTime();
-    _angleChange = 0;
+    _angleDelta = 0;
     
     float dx = touchPoint.x - self.container.center.x;
 	float dy = touchPoint.y - self.container.center.y;
-	_deltaAngle = atan2(dy, dx);
-    
-    _startTransform = self.container.transform;
+
+	_initialAngle = _currentAngle = _previousAngle = atan2(dy, dx);
+    _initialTransform = self.container.transform;
     
     return YES;
 }
@@ -119,17 +121,19 @@
         // NSLog(@"drag path too close to the center (%f,%f)", pt.x, pt.y);
         return NO;        
     }
-	
+
 	float dx = pt.x - self.container.center.x;
 	float dy = pt.y - self.container.center.y;
-	float ang = atan2(dy, dx);
-    
-    _angleChange = _deltaAngle - ang;
 
-    self.container.transform = CGAffineTransformRotate(_startTransform, -_angleChange);
+    _previousAngle = _currentAngle;
+	_currentAngle = atan2(dy, dx);
+
+    _angleDelta = _initialAngle - _currentAngle;
+
+    self.container.transform = CGAffineTransformRotate(_initialTransform, -_angleDelta);
     
     if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
-        [self.delegate wheel:self didRotateByAngle:_angleChange];
+        [self.delegate wheel:self didRotateByAngle:_angleDelta];
     }
     
     return YES;
@@ -224,7 +228,7 @@
     CGFloat velocity = 0.0;
 
     if (_startTouchTime != _endTouchTime) {
-        velocity = _angleChange / (_endTouchTime - _startTouchTime) / kVelocityCoefficient;
+        velocity = (_previousAngle - _currentAngle) / (_endTouchTime - _startTouchTime);
     }
 
     if (velocity > kMaxVelocity) {
