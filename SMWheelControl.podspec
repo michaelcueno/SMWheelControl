@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = '0.1'
   s.summary      = 'SMWheelControl is an iOS component allowing the selection of an item from a 360° spinning wheel.'
   s.author = {
-    'Cesare Rocchi' => ''
+    'Cesare Rocchi' => '',
     'Simone Civetta' => 'viteinfinite@gmail.com'
   }
   s.source = {
@@ -11,5 +11,5 @@ Pod::Spec.new do |s|
     :tag => '0.1'
   }
   s.source_files = 'SMWheelControlSample/SMWheelControl/*.{h,m}'
-  s.dependency     'QuartzCore'
+  s.frameworks = 'QuartzCore'
 end
