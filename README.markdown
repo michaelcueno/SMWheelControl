@@ -47,6 +47,14 @@ For instance:
 }
 ```
 
+When the wheel ends snapping to the closest slice, if you added a target, then it will receive the event `UIControlEventValueChanged`, e.g.: 
+```objective-c
+- (void)wheelDidChangeValue:(id)sender
+{
+    self.valueLabel.text = [NSString stringWithFormat:@"%d", self.wheel.selectedIndex];
+}
+```
+
 ## Delegate
 You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
 
