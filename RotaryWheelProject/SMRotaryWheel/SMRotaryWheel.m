@@ -10,11 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "SMRotaryDataSource.h"
 
-static CGFloat kDeltaAngle;
-static CGFloat kMaxVelocity = 2000.0;
-static CGFloat kDecelerationRate = 0.97;
-static CGFloat kMinDeceleration = 0.1;
-
 @interface SMRotaryWheel()
 
 @property (nonatomic, strong) UIView *container;
@@ -30,6 +25,7 @@ static CGFloat kMinDeceleration = 0.1;
     CFTimeInterval _endTouchTime;
     CGFloat _angleChange;
     CGAffineTransform _startTransform;
+    CGFloat _deltaAngle;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -64,7 +60,6 @@ static CGFloat kMinDeceleration = 0.1;
         sliceView.layer.position = CGPointMake(self.container.bounds.size.width / 2.0 - self.container.frame.origin.x,
                                         self.container.bounds.size.height / 2.0 - self.container.frame.origin.y);
         sliceView.transform = CGAffineTransformMakeRotation(angleSize * i);
-        sliceView.tag = i;
 
         [self.container addSubview:sliceView];
     }
@@ -81,27 +76,19 @@ static CGFloat kMinDeceleration = 0.1;
 }
 
 
-- (float)distanceFromCenter:(CGPoint)point
-{
-    CGPoint center = CGPointMake(self.bounds.size.width/2.0f, self.bounds.size.height/2.0f);
-	float dx = point.x - center.x;
-	float dy = point.y - center.y;
-	return sqrt(dx * dx + dy * dy);
-}
-
-
 #pragma mark - Touches
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
     if (_decelerating) {
-        [self endDeceleration];
+        [self.container.layer removeAllAnimations];
+        [self endDecelerationAvoidingSnap:YES];
     }
 
     CGPoint touchPoint = [touch locationInView:self];
     float dist = [self distanceFromCenter:touchPoint];
     
-    if (dist < 40 || dist > 100) 
+    if (dist < kMinDistanceFromCenter)
     {
         return NO;
     }
@@ -109,9 +96,9 @@ static CGFloat kMinDeceleration = 0.1;
     _startTouchTime = _endTouchTime = CACurrentMediaTime();
     _angleChange = 0;
     
-	float dx = touchPoint.x - self.container.center.x;
+    float dx = touchPoint.x - self.container.center.x;
 	float dy = touchPoint.y - self.container.center.y;
-	kDeltaAngle = atan2(dy, dx);
+	_deltaAngle = atan2(dy, dx);
     
     _startTransform = self.container.transform;
     
@@ -123,37 +110,26 @@ static CGFloat kMinDeceleration = 0.1;
 {
     CGPoint pt = [touch locationInView:self];
 
-    // If the change shows a really big jump, that means we've crossed the 0 degree line, and we need to calculate differently.
-    // I'm sure there's a different way to do this, seems hackish, but it works just fine.
-    /*
-    if (change > 100.0f) {
-        change -=360.0f;
-    }
-    else if (change < -100.0f) {
-        change +=360.0f;
-    }
-    */
-
     _startTouchTime = _endTouchTime;
     _endTouchTime = CACurrentMediaTime();
     
     float dist = [self distanceFromCenter:pt];
     
-    if (dist < 40 || dist > 100) {
+    if (dist < kMinDistanceFromCenter) {
         // NSLog(@"drag path too close to the center (%f,%f)", pt.x, pt.y);
+        return NO;        
     }
 	
-	float dx = pt.x  - self.container.center.x;
-	float dy = pt.y  - self.container.center.y;
+	float dx = pt.x - self.container.center.x;
+	float dy = pt.y - self.container.center.y;
 	float ang = atan2(dy, dx);
     
-    float angleDifference = kDeltaAngle - ang;
-    _angleChange = angleDifference;
+    _angleChange = _deltaAngle - ang;
 
-    self.container.transform = CGAffineTransformRotate(_startTransform, -angleDifference);
+    self.container.transform = CGAffineTransformRotate(_startTransform, -_angleChange);
     
     if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
-        [self.delegate wheel:self didRotateByAngle:angleDifference];
+        [self.delegate wheel:self didRotateByAngle:_angleChange];
     }
     
     return YES;
@@ -168,7 +144,7 @@ static CGFloat kMinDeceleration = 0.1;
 
 #pragma mark - Positioning
 
-- (void)snapToNearestClove
+- (void)snapToNearestSlice
 {
     CGFloat radians = atan2f(self.container.transform.b, self.container.transform.a);
 
@@ -179,7 +155,7 @@ static CGFloat kMinDeceleration = 0.1;
     
     [UIView animateWithDuration:(snappedRadians - radians) / 0.1
                           delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut
+                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          CGAffineTransform t = CGAffineTransformMakeRotation(snappedRadians);
                          self.container.transform = t;
@@ -196,26 +172,27 @@ static CGFloat kMinDeceleration = 0.1;
 
 - (void)beginDeceleration
 {
-    CGFloat v = [self velocity];
+    _animatingVelocity = [self velocity];
     
-    if (v != 0) {
+    if (_animatingVelocity != 0) {
         _decelerating = YES;
-        _animatingVelocity = v;
         _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(decelerationStep)];
         _displayLink.frameInterval = 1;
         [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    } else {
+        [self snapToNearestSlice];
     }
 }
 
 
--(void)decelerationStep
+- (void)decelerationStep
 {
     CGFloat newVelocity = _animatingVelocity * kDecelerationRate;
     
     CGFloat angle = _animatingVelocity / 60.0;
 
     if (newVelocity <= kMinDeceleration && newVelocity >= -kMinDeceleration) {
-        [self endDeceleration];
+        [self endDecelerationAvoidingSnap:NO];
     } else {
         _animatingVelocity = newVelocity;
         
@@ -228,12 +205,15 @@ static CGFloat kMinDeceleration = 0.1;
 }
 
 
--(void)endDeceleration
+- (void)endDecelerationAvoidingSnap:(BOOL)avoidSnap
 {
-    _decelerating = NO;
     [_displayLink invalidate], _displayLink = nil;
+
+    if (!avoidSnap) {
+        [self snapToNearestSlice];
+    }
     
-    [self snapToNearestClove];
+    _decelerating = NO;
 }
 
 
@@ -244,19 +224,34 @@ static CGFloat kMinDeceleration = 0.1;
     CGFloat velocity = 0.0;
 
     if (_startTouchTime != _endTouchTime) {
-        velocity = _angleChange / (_endTouchTime - _startTouchTime) / 10.0;
+        velocity = _angleChange / (_endTouchTime - _startTouchTime) / kVelocityCoefficient;
     }
 
-    if (velocity > kMaxVelocity) {velocity = kMaxVelocity;}
-    else if (velocity < -kMaxVelocity) {velocity = -kMaxVelocity;}
+    if (velocity > kMaxVelocity) {
+        velocity = kMaxVelocity;
+    } else if (velocity < -kMaxVelocity) {
+        velocity = -kMaxVelocity;
+    }
 
     return velocity;
 }
+
+
+- (float)distanceFromCenter:(CGPoint)point
+{
+    CGPoint center = CGPointMake(self.bounds.size.width/2.0f, self.bounds.size.height/2.0f);
+    float dx = point.x - center.x;
+    float dy = point.y - center.y;
+    return sqrt(dx * dx + dy * dy);
+}
+
 
 - (void)reloadData
 {
     [self clearWheel];
     [self drawWheel];
 }
+
+
 
 @end

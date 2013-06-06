@@ -55,12 +55,12 @@
 
 - (NSUInteger)numberOfSlicesInWheel:(SMRotaryWheel *)wheel
 {
-    return 8;
+    return 10;
 }
 
 - (UIView *)wheel:(SMRotaryWheel *)wheel viewForSliceAtIndex:(NSUInteger)index
 {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 150, 30)];
     label.backgroundColor = [UIColor whiteColor];
     label.text = [NSString stringWithFormat:@" %d", index];
     return label;
