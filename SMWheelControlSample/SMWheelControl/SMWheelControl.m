@@ -101,7 +101,7 @@
     float dx = touchPoint.x - self.container.center.x;
 	float dy = touchPoint.y - self.container.center.y;
 
-	_initialAngle = _currentAngle = _previousAngle = atan2(dy, dx);
+	_initialAngle = _currentAngle = _previousAngle = atan2f(dy, dx);
     _initialTransform = self.container.transform;
     
     return YES;
@@ -126,7 +126,7 @@
 	float dy = pt.y - self.container.center.y;
 
     _previousAngle = _currentAngle;
-	_currentAngle = atan2(dy, dx);
+	_currentAngle = atan2f(dy, dx);
 
     _angleDelta = _initialAngle - _currentAngle;
 
@@ -151,6 +151,10 @@
 - (void)snapToNearestSlice
 {
     CGFloat radians = atan2f(self.container.transform.b, self.container.transform.a);
+    
+    if (radians < 0) {
+        radians += 2.0 * M_PI;
+    }
 
     int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     double radiansPerSlice = 2.0 * M_PI / numberOfSlices;
@@ -166,7 +170,10 @@
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [self didEndRotationOnSliceAtIndex:closestSlice % numberOfSlices];
+                             [self didEndRotationOnSliceAtIndex:
+                              (closestSlice == 0 || closestSlice == numberOfSlices) ?
+                              0 :
+                              (numberOfSlices - closestSlice % numberOfSlices)];
                          }     
                      }];
 }
