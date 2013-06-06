@@ -9,9 +9,13 @@
 #import "SMViewController.h"
 #import "SMRotaryWheel.h"
 
-@implementation SMViewController
+@interface SMViewController()
 
-@synthesize  valueLabel;
+@property (nonatomic, weak) SMRotaryWheel *wheel;
+
+@end
+
+@implementation SMViewController
 
 - (void)didReceiveMemoryWarning
 {
@@ -24,32 +28,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    valueLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 350, 120, 30)];
-    valueLabel.textAlignment = UITextAlignmentCenter;
-    valueLabel.backgroundColor = [UIColor lightGrayColor];
-    [self.view addSubview:valueLabel];
 	
-    SMRotaryWheel *wheel = [[SMRotaryWheel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    SMRotaryWheel *wheel = [[SMRotaryWheel alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+    [wheel addTarget:self action:@selector(wheelDidChangeValue:) forControlEvents:UIControlEventValueChanged];
     wheel.delegate = self;
     wheel.dataSource = self;
     [wheel reloadData];
-    
-    wheel.center = CGPointMake(160, 240);
+
     [self.view addSubview:wheel];
-    
-    
-    
+    self.wheel = wheel;
 }
 
 #pragma mark - Wheel delegate
 
-- (void)wheel:(SMRotaryWheel *)wheel didSelectValueAtIndex:(NSUInteger)newValue
+- (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel
 {
-    self.valueLabel.text = @"1";
+    
 }
 
-- (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel
+- (void)wheel:(SMRotaryWheel *)wheel didRotateByAngle:(CGFloat)angle
 {
     
 }
@@ -64,9 +61,16 @@
 - (UIView *)wheel:(SMRotaryWheel *)wheel viewForSliceAtIndex:(NSUInteger)index
 {
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 50, 20)];
-    label.backgroundColor = [UIColor blueColor];
-    label.text = [NSString stringWithFormat:@"%d", index];
+    label.backgroundColor = [UIColor whiteColor];
+    label.text = [NSString stringWithFormat:@" %d", index];
     return label;
+}
+
+#pragma mark - Wheel Control
+
+- (void)wheelDidChangeValue:(id)sender
+{
+    self.valueLabel.text = [NSString stringWithFormat:@"%d", self.wheel.selectedIndex];
 }
 
 

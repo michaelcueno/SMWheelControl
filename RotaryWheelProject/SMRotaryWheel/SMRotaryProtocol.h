@@ -12,7 +12,6 @@
 
 @protocol SMRotaryProtocol <NSObject>
 
-- (void)wheel:(SMRotaryWheel *)wheel didSelectValueAtIndex:(NSUInteger)index;
 - (void)wheelDidEndDecelerating:(SMRotaryWheel *)wheel;
 - (void)wheel:(SMRotaryWheel *)wheel didRotateByAngle:(CGFloat)angle;
 

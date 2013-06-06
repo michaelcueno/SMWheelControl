@@ -17,9 +17,7 @@
 @property (nonatomic, weak) id <SMRotaryProtocol> delegate;
 @property (nonatomic, weak) id <SMRotaryDataSource> dataSource;
 
-@property (nonatomic, strong) UIView *container;
-@property int currentValue;
-@property CGAffineTransform startTransform;
+@property (nonatomic, assign, readonly) int selectedIndex;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)reloadData;

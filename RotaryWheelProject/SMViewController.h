@@ -11,6 +11,6 @@
 
 @interface SMViewController : UIViewController<SMRotaryProtocol, SMRotaryDataSource>
 
-@property (nonatomic, strong) UILabel *valueLabel;
+@property (nonatomic, weak) IBOutlet UILabel *valueLabel;
 
 @end

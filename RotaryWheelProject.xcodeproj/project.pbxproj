@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2EE4488078C7CF20B250A055 /* SMClove.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE44C9C0E6816AD0861E621 /* SMClove.m */; };
 		2EE44BC1B4E1519D660481C6 /* SMRotaryWheel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EE449532D9760D7F5610652 /* SMRotaryWheel.m */; };
 		BD683C5E14EAB964005EF069 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5314EAB964005EF069 /* bg.png */; };
 		BD683C5F14EAB964005EF069 /* centerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BD683C5414EAB964005EF069 /* centerButton.png */; };
@@ -36,8 +35,6 @@
 		2EE4443ECBEEBE7291FED898 /* SMRotaryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryProtocol.h; sourceTree = "<group>"; };
 		2EE447651337879D5C39606B /* SMRotaryDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMRotaryDataSource.h; sourceTree = "<group>"; };
 		2EE449532D9760D7F5610652 /* SMRotaryWheel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMRotaryWheel.m; sourceTree = "<group>"; };
-		2EE44BF360C6C214B3C1FF3E /* SMClove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMClove.h; sourceTree = "<group>"; };
-		2EE44C9C0E6816AD0861E621 /* SMClove.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMClove.m; sourceTree = "<group>"; };
 		BD683C5314EAB964005EF069 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
 		BD683C5414EAB964005EF069 /* centerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerButton.png; sourceTree = "<group>"; };
 		BD683C5514EAB964005EF069 /* icon0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon0.png; sourceTree = "<group>"; };
@@ -83,12 +80,10 @@
 		2EE4462B12641DBEBAAEF3D2 /* SMRotaryWheel */ = {
 			isa = PBXGroup;
 			children = (
-				2EE447651337879D5C39606B /* SMRotaryDataSource.h */,
-				2EE449532D9760D7F5610652 /* SMRotaryWheel.m */,
 				2EE441E098AEF0AE7795514D /* SMRotaryWheel.h */,
+				2EE449532D9760D7F5610652 /* SMRotaryWheel.m */,
+				2EE447651337879D5C39606B /* SMRotaryDataSource.h */,
 				2EE4443ECBEEBE7291FED898 /* SMRotaryProtocol.h */,
-				2EE44BF360C6C214B3C1FF3E /* SMClove.h */,
-				2EE44C9C0E6816AD0861E621 /* SMClove.m */,
 			);
 			path = SMRotaryWheel;
 			sourceTree = "<group>";
@@ -242,7 +237,6 @@
 				BDF438B114E5638700A27135 /* SMAppDelegate.m in Sources */,
 				BDF438B414E5638700A27135 /* SMViewController.m in Sources */,
 				2EE44BC1B4E1519D660481C6 /* SMRotaryWheel.m in Sources */,
-				2EE4488078C7CF20B250A055 /* SMClove.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
