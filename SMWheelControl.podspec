@@ -11,5 +11,13 @@ Pod::Spec.new do |s|
     :tag => '0.1'
   }
   s.source_files = 'SMWheelControlSample/SMWheelControl/*.{h,m}'
-  s.frameworks = 'QuartzCore'
+  s.frameworks = 'QuartzCore', 'UIKit'
+  s.license = {
+    :type => 'Custom',
+    :text => <<-LICENSE
+    LICENSE
+  }
+  s.requires_arc = true
+  s.homepage = 'https://github.com/viteinfinite/SMWheelControl'
+  s.ios.deployment_target = '5.0'
 end

@@ -325,6 +325,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SMWheelControlSample/SMWheelControl-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/SMWheelControlSample/SMWheelControl-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = SMWheelControl;
 				WRAPPER_EXTENSION = app;
 			};
@@ -336,6 +337,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SMWheelControlSample/SMWheelControl-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/SMWheelControlSample/SMWheelControl-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = SMWheelControl;
 				WRAPPER_EXTENSION = app;
 			};
