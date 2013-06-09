@@ -67,7 +67,5 @@ You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
 * Simone Civetta (@viteinfinite)
 
 # License
-
-In case you want to use this code in your projects, you can.
-Just check out the license.txt file for attribution.
+* [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
