@@ -12,6 +12,7 @@
 
 @protocol SMWheelControlDelegate <NSObject>
 
+@optional
 - (void)wheelDidEndDecelerating:(SMWheelControl *)wheel;
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
 
