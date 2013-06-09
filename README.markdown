@@ -63,8 +63,8 @@ You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
 ```
 # Authors
-* Cesare Rocchi (funkyboy)
-* Simone Civetta (viteinfinite)
+* Cesare Rocchi (@_funkyboy)
+* Simone Civetta (@viteinfinite)
 
 # License
 
