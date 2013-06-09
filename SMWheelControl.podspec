@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   }
   s.source = {
     :git => 'https://github.com/viteinfinite/SMWheelControl.git',
-    :tag => '0.1'
+    :tag => '0.1.1'
   }
   s.source_files = 'SMWheelControlSample/SMWheelControl/*.{h,m}'
   s.frameworks = 'QuartzCore', 'UIKit'
