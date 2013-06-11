@@ -1,5 +1,5 @@
 # SMWheelControl
-SMWheelControl is an iOS component allowing the selection of an item from a 360° spinning wheel. 
+SMWheelControl is an iOS component allowing the selection of an item from a 360° spinning wheel with a smooth inertial rotation. 
 
 The code is loosely based on the tutorial "How To Create a Rotating Wheel Control with UIKit" published on the post [http://www.raywenderlich.com/9864/how-to-create-a-rotating-wheel-control-with-uikit](http://www.raywenderlich.com/9864/how-to-create-a-rotating-wheel-control-with-uikit) by Cesare Rocchi.
 
@@ -63,11 +63,9 @@ You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
 ```
 # Authors
-* Cesare Rocchi (funkyboy)
-* Simone Civetta (viteinfinite)
+* Cesare Rocchi (@_funkyboy)
+* Simone Civetta (@viteinfinite)
 
 # License
-
-In case you want to use this code in your projects, you can.
-Just check out the license.txt file for attribution.
+* [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
 
