@@ -136,7 +136,7 @@
     self.sliceContainer.transform = CGAffineTransformRotate(_initialTransform, -_angleDelta);
     
     if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
-        [self.delegate wheel:self didRotateByAngle:_angleDelta];
+        [self.delegate wheel:self didRotateByAngle:(_previousAngle - _currentAngle)];
     }
     
     return YES;
