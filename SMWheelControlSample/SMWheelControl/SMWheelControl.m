@@ -60,13 +60,15 @@
 
     CGFloat angleSize = 2 * M_PI / numberOfSlices;
     
+    CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
+    
     for (int i = 0; i < numberOfSlices; i++) {
         
         UIView *sliceView = [self.dataSource wheel:self viewForSliceAtIndex:i];
         sliceView.layer.anchorPoint = CGPointMake(1.0f, 0.5f);
         sliceView.layer.position = CGPointMake(self.sliceContainer.bounds.size.width / 2.0 - self.sliceContainer.frame.origin.x,
                                         self.sliceContainer.bounds.size.height / 2.0 - self.sliceContainer.frame.origin.y);
-        sliceView.transform = CGAffineTransformMakeRotation(angleSize * i);
+        sliceView.transform = CGAffineTransformMakeRotation(angleSize * i + snappingAngle);
 
         [self.sliceContainer addSubview:sliceView];
     }
@@ -232,7 +234,7 @@
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     
-    if (fabsf(currentAngle - _snappingTargetAngle) <= 0.001) {
+    if (fabsf(currentAngle - _snappingTargetAngle) <= 0.01) {
         [self endSnapping];
     } else {
         currentAngle += _snappingStep;

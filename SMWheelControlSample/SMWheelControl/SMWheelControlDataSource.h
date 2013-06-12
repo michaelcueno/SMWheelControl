@@ -13,5 +13,6 @@
 
 - (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index;
 - (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel;
+- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel;
 
 @end
