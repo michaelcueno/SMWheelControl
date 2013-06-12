@@ -20,14 +20,19 @@
 @implementation SMWheelControl {
     BOOL _decelerating;
     CGFloat _animatingVelocity;
-    CADisplayLink *_displayLink;
+    
+    CADisplayLink *_decelerationDisplayLink;
+    CADisplayLink *_inertiaDisplayLink;
+    
     CFTimeInterval _startTouchTime;
     CFTimeInterval _endTouchTime;
-    CGFloat _angleDelta;
-    CGAffineTransform _initialTransform;
-    CGFloat _initialAngle;
-    CGFloat _previousAngle;
-    CGFloat _currentAngle;
+
+    CGFloat _startTouchAngle;
+    CGFloat _previousTouchAngle;
+    CGFloat _currentTouchAngle;
+    
+    CGFloat _snappingTargetAngle;
+    CGFloat _snappingStep;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -50,7 +55,7 @@
 
 - (void)drawWheel
 {
-    self.sliceContainer = [[UIView alloc] initWithFrame:self.frame];
+    self.sliceContainer = [[UIView alloc] initWithFrame:self.bounds];
     NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
 
     CGFloat angleSize = 2 * M_PI / numberOfSlices;
@@ -87,7 +92,7 @@
 {
     if (_decelerating) {
         [self.sliceContainer.layer removeAllAnimations];
-        [self endDecelerationAvoidingSnap:YES];
+        [self endDecelerationAvoidingSnap:NO];
     }
 
     CGPoint touchPoint = [touch locationInView:self];
@@ -99,13 +104,11 @@
     }
 
     _startTouchTime = _endTouchTime = CACurrentMediaTime();
-    _angleDelta = 0;
     
     float dx = touchPoint.x - self.sliceContainer.center.x;
 	float dy = touchPoint.y - self.sliceContainer.center.y;
 
-	_initialAngle = _currentAngle = _previousAngle = atan2f(dy, dx);
-    _initialTransform = self.sliceContainer.transform;
+	_startTouchAngle = _currentTouchAngle = _previousTouchAngle = atan2f(dy, dx);
     
     return YES;
 }
@@ -121,22 +124,22 @@
     float dist = [self distanceFromCenter:pt];
     
     if (dist < kMinDistanceFromCenter) {
-        // NSLog(@"drag path too close to the center (%f,%f)", pt.x, pt.y);
+        // Drag path too close to the center
         return NO;        
     }
 
 	float dx = pt.x - self.sliceContainer.center.x;
 	float dy = pt.y - self.sliceContainer.center.y;
 
-    _previousAngle = _currentAngle;
-	_currentAngle = atan2f(dy, dx);
+    _previousTouchAngle = _currentTouchAngle;
+	_currentTouchAngle = atan2f(dy, dx);
 
-    _angleDelta = _initialAngle - _currentAngle;
+    CGFloat angleDelta = _currentTouchAngle - _previousTouchAngle;
 
-    self.sliceContainer.transform = CGAffineTransformRotate(_initialTransform, -_angleDelta);
+    self.sliceContainer.transform = CGAffineTransformRotate(self.sliceContainer.transform, angleDelta);
     
     if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
-        [self.delegate wheel:self didRotateByAngle:(_previousAngle - _currentAngle)];
+        [self.delegate wheel:self didRotateByAngle:(angleDelta)];
     }
     
     return YES;
@@ -149,39 +152,6 @@
 }
 
 
-#pragma mark - Positioning
-
-- (void)snapToNearestSlice
-{
-    CGFloat radians = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
-    
-    if (radians < 0) {
-        radians += 2.0 * M_PI;
-    }
-
-    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
-    double radiansPerSlice = 2.0 * M_PI / numberOfSlices;
-    int closestSlice = round(radians / radiansPerSlice);
-    double snappedRadians = (double)closestSlice * radiansPerSlice;
-    
-    [UIView animateWithDuration:(snappedRadians - radians) / 0.1
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         CGAffineTransform t = CGAffineTransformMakeRotation(snappedRadians);
-                         self.sliceContainer.transform = t;
-                     }
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             [self didEndRotationOnSliceAtIndex:
-                              (closestSlice == 0 || closestSlice == numberOfSlices) ?
-                              0 :
-                              (numberOfSlices - closestSlice % numberOfSlices)];
-                         }     
-                     }];
-}
-
-
 #pragma mark - Inertia
 
 - (void)beginDeceleration
@@ -190,9 +160,10 @@
     
     if (_animatingVelocity != 0) {
         _decelerating = YES;
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(decelerationStep)];
-        _displayLink.frameInterval = 1;
-        [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+        [_decelerationDisplayLink invalidate];
+        _decelerationDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(decelerationStep)];
+        _decelerationDisplayLink.frameInterval = 1;
+        [_decelerationDisplayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     } else {
         [self snapToNearestSlice];
     }
@@ -204,7 +175,7 @@
     CGFloat newVelocity = _animatingVelocity * kDecelerationRate;
     
     CGFloat angle = _animatingVelocity / 60.0;
-
+    
     if (newVelocity <= kMinDeceleration && newVelocity >= -kMinDeceleration) {
         [self endDecelerationAvoidingSnap:NO];
     } else {
@@ -213,7 +184,7 @@
         self.sliceContainer.transform = CGAffineTransformRotate(self.sliceContainer.transform, -angle);
         
         if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
-            [self.delegate wheel:self didRotateByAngle:angle];
+            [self.delegate wheel:self didRotateByAngle:-angle];
         }
     }
 }
@@ -221,13 +192,61 @@
 
 - (void)endDecelerationAvoidingSnap:(BOOL)avoidSnap
 {
-    [_displayLink invalidate], _displayLink = nil;
-
+    [_decelerationDisplayLink invalidate];
+    _decelerating = NO;
+    
     if (!avoidSnap) {
         [self snapToNearestSlice];
+    }    
+}
+
+
+#pragma mark - Snapping
+
+- (void)snapToNearestSlice
+{
+    CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
+    
+    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
+    int closestSlice = round(currentAngle / radiansPerSlice);
+    _snappingTargetAngle = (CGFloat)closestSlice * radiansPerSlice;
+    
+    if (currentAngle != _snappingTargetAngle) {
+        _snappingStep = -(currentAngle - _snappingTargetAngle) / 10.0;
+    } else {
+        return;
     }
     
-    _decelerating = NO;
+    _animatingVelocity = [self velocity];
+    
+    if (_animatingVelocity != 0) {
+        [_inertiaDisplayLink invalidate];
+        _inertiaDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(snappingStep)];
+        _inertiaDisplayLink.frameInterval = 1;
+        [_inertiaDisplayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    }
+}
+
+- (void)snappingStep
+{
+    CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
+    
+    if (fabsf(currentAngle - _snappingTargetAngle) <= 0.001) {
+        [self endSnapping];
+    } else {
+        currentAngle += _snappingStep;
+        self.sliceContainer.transform = CGAffineTransformMakeRotation(currentAngle);
+        
+        if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
+            [self.delegate wheel:self didRotateByAngle:_snappingStep];
+        }
+    }
+}
+
+- (void)endSnapping
+{
+    [_inertiaDisplayLink invalidate];
 }
 
 
@@ -238,7 +257,7 @@
     CGFloat velocity = 0.0;
 
     if (_startTouchTime != _endTouchTime) {
-        velocity = (_previousAngle - _currentAngle) / (_endTouchTime - _startTouchTime);
+        velocity = (_previousTouchAngle - _currentTouchAngle) / (_endTouchTime - _startTouchTime);
     }
 
     if (velocity > kMaxVelocity) {
