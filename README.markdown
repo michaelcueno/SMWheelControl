@@ -26,8 +26,9 @@ wheel.dataSource = self;
 ```
 and implement the following methods (the dataSource should conform to the `SMWheelControlDataSource`):
 ```objective-c
-- (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index;
-- (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel;
+- (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index
+- (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel
+- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel // (optional)
 ```
 
 For instance:
@@ -54,6 +55,9 @@ When the wheel ends snapping to the closest slice, if you added a target, then i
     self.valueLabel.text = [NSString stringWithFormat:@"%d", self.wheel.selectedIndex];
 }
 ```
+
+The dataSource can also provide a snapping angle, i.e. the angle at which the wheel should snap to. This can be set via the optional method
+`- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel`
 
 ## Delegate
 You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
