@@ -127,7 +127,7 @@
     
     if (dist < kMinDistanceFromCenter) {
         // Drag path too close to the center
-        return NO;        
+        return YES;
     }
 
 	float dx = pt.x - self.sliceContainer.center.x;

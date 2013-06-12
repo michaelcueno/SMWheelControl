@@ -12,7 +12,7 @@
 
 @protocol SMWheelControlDataSource;
 
-static const CGFloat kMinDistanceFromCenter = 40.0;
+static const CGFloat kMinDistanceFromCenter = 30.0;
 static const CGFloat kMaxVelocity = 20.0;
 static const CGFloat kDecelerationRate = 0.97;
 static const CGFloat kMinDeceleration = 0.1;
