@@ -11,8 +11,11 @@
 
 @protocol SMWheelControlDataSource <NSObject>
 
+@required
 - (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index;
 - (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel;
+
+@optional
 - (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel;
 
 @end
