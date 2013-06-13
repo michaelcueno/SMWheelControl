@@ -15,5 +15,6 @@
 @optional
 - (void)wheelDidEndDecelerating:(SMWheelControl *)wheel;
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
+- (void)wheel:(SMWheelControl *)wheel didTapOnSliceAtIndex:(NSUInteger)index;
 
 @end

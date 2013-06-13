@@ -21,9 +21,10 @@ static const CGFloat kMinDeceleration = 0.1;
 
 @property (nonatomic, weak) id <SMWheelControlDelegate> delegate;
 @property (nonatomic, weak) id <SMWheelControlDataSource> dataSource;
-@property (nonatomic, assign, readonly) int selectedIndex;
+@property (nonatomic, assign) int selectedIndex;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)reloadData;
+- (void)setSelectedIndex:(int)selectedIndex animated:(BOOL)animated;
 
 @end
