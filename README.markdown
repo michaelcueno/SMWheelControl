@@ -5,7 +5,7 @@ The code is loosely based on the tutorial "How To Create a Rotating Wheel Contro
 
 Sample screenshot:
 
-![The final result](https://github.com/funkyboy/How-To-Create-a-Rotating-Wheel-Control-with-UIKit/blob/master/final.png?raw=true "The final result")
+![The final result](https://github.com/viteinfinite/SMRotatingWheel/blob/master/final.png?raw=true "The final result")
 
 # Usage
 
