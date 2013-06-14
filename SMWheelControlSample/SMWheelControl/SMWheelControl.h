@@ -10,6 +10,12 @@
 #import "SMWheelControlDelegate.h"
 #import "SMWheelControlDataSource.h"
 
+typedef enum {
+    SMWheelControlStatusIdle,
+    SMWheelControlStatusDecelerating,
+    SMWheelControlStatusSnapping
+} SMWheelControlStatus;
+
 @protocol SMWheelControlDataSource;
 
 static const CGFloat kMinDistanceFromCenter = 30.0;
@@ -22,6 +28,7 @@ static const CGFloat kMinDeceleration = 0.1;
 @property (nonatomic, weak) id <SMWheelControlDelegate> delegate;
 @property (nonatomic, weak) id <SMWheelControlDataSource> dataSource;
 @property (nonatomic, assign) int selectedIndex;
+@property (nonatomic, assign, readonly) SMWheelControlStatus status;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)reloadData;

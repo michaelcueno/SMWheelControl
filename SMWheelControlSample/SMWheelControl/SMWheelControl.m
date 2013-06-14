@@ -13,12 +13,11 @@
 @interface SMWheelControl ()
 
 @property (nonatomic, strong) UIView *sliceContainer;
+@property (nonatomic, assign) SMWheelControlStatus status;
 
 @end
 
 @implementation SMWheelControl {
-    BOOL _decelerating;
-    BOOL _snapping;
     BOOL _detectingTap;
     
     CGFloat _animatingVelocity;
@@ -91,18 +90,23 @@
 #pragma mark - Touches
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
-{    
-    if (_decelerating) {
-        [self endDecelerationAvoidingSnap:NO];
-        [self endSnapping];
-    }
-    
-    if (_snapping) {
-        [self endSnapping];
-    }
-    
-    if (!_decelerating && !_snapping) {
-        _detectingTap = YES;
+{
+    switch (_status) {
+        case SMWheelControlStatusIdle:
+            _detectingTap = YES;
+            break;
+            
+        case SMWheelControlStatusDecelerating:
+            [self endDecelerating];
+            [self endSnapping];
+            break;
+            
+        case SMWheelControlStatusSnapping:
+            [self endSnapping];
+            break;
+            
+        default:
+            break;
     }
 
     CGPoint touchPoint = [touch locationInView:self];
@@ -154,7 +158,7 @@
 
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    if (!_decelerating && !_snapping && touch.tapCount > 0 && _detectingTap) {
+    if (_status == SMWheelControlStatusIdle && touch.tapCount > 0 && _detectingTap) {
         
         [self didReceiveTapAtAngle:[self angleForTouch:touch]];
         _detectingTap = NO;
@@ -172,7 +176,7 @@
     _animatingVelocity = [self velocity];
 
     if (_animatingVelocity != 0) {
-        _decelerating = YES;
+        _status = SMWheelControlStatusDecelerating;
         [_decelerationDisplayLink invalidate];
         _decelerationDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(decelerationStep)];
         _decelerationDisplayLink.frameInterval = 1;
@@ -191,7 +195,7 @@
     CGFloat angle = _animatingVelocity / 60.0;
 
     if (newVelocity <= kMinDeceleration && newVelocity >= -kMinDeceleration) {
-        [self endDecelerationAvoidingSnap:NO];
+        [self endDecelerating];
         
     } else {
         _animatingVelocity = newVelocity;
@@ -205,15 +209,10 @@
 }
 
 
-- (void)endDecelerationAvoidingSnap:(BOOL)avoidSnap
+- (void)endDecelerating
 {
     [_decelerationDisplayLink invalidate];
-
-    if (!avoidSnap) {
-        [self snapToNearestSlice];
-    }
-
-    _decelerating = NO;
+    [self snapToNearestSlice];
 }
 
 
@@ -221,6 +220,8 @@
 
 - (void)snapToNearestSlice
 {
+    _status = SMWheelControlStatusSnapping;
+    
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
 
     int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
@@ -257,7 +258,7 @@
 - (void)endSnapping
 {
     [_inertiaDisplayLink invalidate];
-    _snapping = NO;
+    _status = SMWheelControlStatusIdle;
 }
 
 
@@ -307,14 +308,11 @@
         return;
     }
 
-    
-    if (YES) {
-        _snapping = YES;
-        [_inertiaDisplayLink invalidate];
-        _inertiaDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(snappingStep)];
-        _inertiaDisplayLink.frameInterval = 1;
-        [_inertiaDisplayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
-    }
+    _status = SMWheelControlStatusSnapping;
+    [_inertiaDisplayLink invalidate];
+    _inertiaDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(snappingStep)];
+    _inertiaDisplayLink.frameInterval = 1;
+    [_inertiaDisplayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
 
