@@ -8,7 +8,14 @@
 
 #import "SMWheelControl.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SMWheelControlDataSource.h"
+
+static const CGFloat kMinDistanceFromCenter = 30.0;
+static const CGFloat kMaxVelocity = 20.0;
+static const CGFloat kSMDecelerationMultiplier = 0.97;
+static const CGFloat kMinDeceleration = 0.1;
+static const CGFloat kSMSnappingAngleThreshold = 0.01;
+static const CGFloat kSMAngleDeltaThreshold = 0.1;
+static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 
 @interface SMWheelControl ()
 
@@ -190,7 +197,7 @@
 
 - (void)decelerationStep
 {
-    CGFloat newVelocity = _animatingVelocity * kDecelerationRate;
+    CGFloat newVelocity = _animatingVelocity * kSMDecelerationMultiplier;
 
     CGFloat angle = _animatingVelocity / 60.0;
 
@@ -242,7 +249,7 @@
         _snappingTargetAngle += 2.0 * M_PI;
     }
     
-    if (fabsf(currentAngle - _snappingTargetAngle) <= 0.01) {
+    if (fabsf(currentAngle - _snappingTargetAngle) <= kSMSnappingAngleThreshold) {
         [self endSnapping];
     } else {
         currentAngle += _snappingStep;
@@ -303,7 +310,8 @@
     }
 
     if (currentAngle != _snappingTargetAngle) {
-        _snappingStep = (_snappingTargetAngle - currentAngle) / 15.0;
+        CGFloat velocityMultiplier = animated ? kSMDefaultSelectionVelocityMultiplier : 1.0;
+        _snappingStep = (_snappingTargetAngle - currentAngle) / kSMDefaultSelectionVelocityMultiplier;
     } else {
         return;
     }
@@ -320,8 +328,8 @@
 {
     CGFloat velocity = 0.0;
 
-    if (_startTouchTime != _endTouchTime) {
-        velocity = (_previousTouchAngle - _currentTouchAngle) / (_endTouchTime - _startTouchTime);
+    if (_endTouchTime != _startTouchTime && fabsf(_previousTouchAngle - _currentTouchAngle) >= kSMAngleDeltaThreshold) {
+        velocity = (_previousTouchAngle - _currentTouchAngle) / (CGFloat)(_endTouchTime - _startTouchTime);
     }
 
     if (velocity > kMaxVelocity) {
