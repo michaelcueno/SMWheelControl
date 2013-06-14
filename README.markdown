@@ -28,7 +28,7 @@ and implement the following methods (the dataSource should conform to the `SMWhe
 ```objective-c
 - (UIView *)wheel:(SMWheelControl *)wheel viewForSliceAtIndex:(NSUInteger)index
 - (NSUInteger)numberOfSlicesInWheel:(SMWheelControl *)wheel
-- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel // (optional)
+- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel // optional
 ```
 
 For instance:
@@ -60,11 +60,12 @@ The dataSource can also provide a snapping angle, i.e. the angle at which the wh
 `- (CGFloat)snappingAngleForWheel:(SMWheelControl *)wheel`
 
 ## Delegate
-You can also implement the methods provided by `SMWheelControlDelegate`, i.e.:
+You can also implement the (hopefully self-explanatory) methods provided by `SMWheelControlDelegate`, i.e.:
 
 ```objective-c
 - (void)wheelDidEndDecelerating:(SMWheelControl *)wheel;
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
+- (void)wheel:(SMWheelControl *)wheel didTapOnSliceAtIndex:(NSUInteger)index;
 ```
 # Authors
 * Cesare Rocchi (@_funkyboy)
