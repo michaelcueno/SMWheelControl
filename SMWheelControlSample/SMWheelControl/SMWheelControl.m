@@ -19,6 +19,7 @@
 @implementation SMWheelControl {
     BOOL _decelerating;
     BOOL _snapping;
+    BOOL _detectingTap;
     
     CGFloat _animatingVelocity;
     
@@ -40,8 +41,7 @@
 {
     if ((self = [super initWithFrame:frame])) {
 		
-        self.selectedIndex = 0;
-		[self drawWheel];
+        [self drawWheel];
 	}
     return self;
 }
@@ -94,6 +94,15 @@
 {    
     if (_decelerating) {
         [self endDecelerationAvoidingSnap:NO];
+        [self endSnapping];
+    }
+    
+    if (_snapping) {
+        [self endSnapping];
+    }
+    
+    if (!_decelerating && !_snapping) {
+        _detectingTap = YES;
     }
 
     CGPoint touchPoint = [touch locationInView:self];
@@ -113,7 +122,9 @@
 
 
 - (BOOL)continueTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event
-{    
+{
+    _detectingTap = NO;
+    
     CGPoint point = [touch locationInView:self];
 
     _startTouchTime = _endTouchTime;
@@ -143,9 +154,10 @@
 
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-    if (!_decelerating && !_snapping && touch.tapCount > 0) {
+    if (!_decelerating && !_snapping && touch.tapCount > 0 && _detectingTap) {
         
         [self didReceiveTapAtAngle:[self angleForTouch:touch]];
+        _detectingTap = NO;
         
     } else {
        [self beginDeceleration]; 
@@ -223,6 +235,12 @@
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     
+    if (_snappingTargetAngle > M_PI) {
+        _snappingTargetAngle -= 2.0 * M_PI;
+    } else if (_snappingTargetAngle < -M_PI) {
+        _snappingTargetAngle += 2.0 * M_PI;
+    }
+    
     if (fabsf(currentAngle - _snappingTargetAngle) <= 0.01) {
         [self endSnapping];
     } else {
@@ -258,10 +276,11 @@
 {
     if ([self.delegate respondsToSelector:@selector(wheel:didTapOnSliceAtIndex:)]) {
         
+        CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
         int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
         CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
         CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
-        int index = (lroundf((angle + snappingAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
+        int index = (lroundf((angle + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
         
         [self.delegate wheel:self didTapOnSliceAtIndex:index];
     }
@@ -273,18 +292,23 @@
     int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
-
+    
     _snappingTargetAngle = (CGFloat)index * radiansPerSlice;
+    
+    if (_snappingTargetAngle - currentAngle > M_PI) {
+        _snappingTargetAngle -= 2.0 * M_PI;
+    } else if (_snappingTargetAngle - currentAngle < -M_PI) {
+        _snappingTargetAngle += 2.0 * M_PI;
+    }
 
     if (currentAngle != _snappingTargetAngle) {
-        _snappingStep = -(currentAngle - _snappingTargetAngle) / 10.0;
+        _snappingStep = (_snappingTargetAngle - currentAngle) / 15.0;
     } else {
         return;
     }
 
-    _animatingVelocity = [self velocity];
     
-    if (_animatingVelocity != 0) {        
+    if (YES) {
         _snapping = YES;
         [_inertiaDisplayLink invalidate];
         _inertiaDisplayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(snappingStep)];
@@ -332,7 +356,7 @@
 
 - (void)setSelectedIndex:(int)selectedIndex animated:(BOOL)animated
 {
-    [self selectSliceAtIndex:selectedIndex animated:animated];
+    [self selectSliceAtIndex:-selectedIndex animated:animated];
 }
 
 - (void)setSelectedIndex:(int)selectedIndex
