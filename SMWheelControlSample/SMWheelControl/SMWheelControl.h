@@ -28,6 +28,6 @@ typedef enum {
 - (id)initWithFrame:(CGRect)frame;
 - (void)reloadData;
 - (void)setSelectedIndex:(int)selectedIndex animated:(BOOL)animated;
-- (void)invalidateDecelerationDisplayLink;
+- (void)invalidateDisplayLinks;
 
 @end

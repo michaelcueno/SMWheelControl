@@ -357,10 +357,13 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
     [self drawWheel];
 }
 
-- (void)invalidateDecelerationDisplayLink
+- (void)invalidateDisplayLinks
 {
     [_decelerationDisplayLink invalidate];
     _decelerationDisplayLink = nil;
+    
+    [_inertiaDisplayLink invalidate];
+    _inertiaDisplayLink = nil;
 }
 
 #pragma mark - selectedIndex Setter
