@@ -13,7 +13,7 @@ static const CGFloat kMinDistanceFromCenter = 30.0;
 static const CGFloat kMaxVelocity = 20.0;
 static const CGFloat kSMDecelerationMultiplier = 0.97;
 static const CGFloat kMinDeceleration = 0.1;
-static const CGFloat kSMSnappingAngleThreshold = 0.01;
+static const CGFloat kSMSnappingAngleThreshold = 0.001;
 static const CGFloat kSMAngleDeltaThreshold = 0.1;
 static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 
@@ -87,7 +87,7 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 - (void)didEndRotationOnSliceAtIndex:(NSUInteger)index
 {
     self.selectedIndex = index;
-    if ([self.delegate respondsToSelector:@selector(wheelDidEndDecelrating:)]) {
+    if ([self.delegate respondsToSelector:@selector(wheelDidEndDecelerating:)]) {
         [self.delegate wheelDidEndDecelerating:self];
     }
     [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -243,13 +243,9 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     
-    if (_snappingTargetAngle > M_PI) {
-        _snappingTargetAngle -= 2.0 * M_PI;
-    } else if (_snappingTargetAngle < -M_PI) {
-        _snappingTargetAngle += 2.0 * M_PI;
-    }
+    CGFloat difference = atan2(sin(_snappingTargetAngle - currentAngle), cos(_snappingTargetAngle - currentAngle));
     
-    if (fabsf(currentAngle - _snappingTargetAngle) <= kSMSnappingAngleThreshold) {
+    if (fabsf(difference) <= kSMSnappingAngleThreshold) {
         [self endSnapping];
     } else {
         currentAngle += _snappingStep;
@@ -264,6 +260,14 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 
 - (void)endSnapping
 {
+    CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
+    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
+    CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
+    int index = (lroundf((- (M_PI / 2) + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
+    
+    [self didEndRotationOnSliceAtIndex:index];
+    
     [_inertiaDisplayLink invalidate];
     _status = SMWheelControlStatusIdle;
 }
