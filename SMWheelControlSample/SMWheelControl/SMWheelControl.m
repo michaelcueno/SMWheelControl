@@ -87,7 +87,7 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 - (void)didEndRotationOnSliceAtIndex:(NSUInteger)index
 {
     self.selectedIndex = index;
-    if ([self.delegate respondsToSelector:@selector(wheelDidEndDecelrating:)]) {
+    if ([self.delegate respondsToSelector:@selector(wheelDidEndDecelerating:)]) {
         [self.delegate wheelDidEndDecelerating:self];
     }
     [self sendActionsForControlEvents:UIControlEventValueChanged];
