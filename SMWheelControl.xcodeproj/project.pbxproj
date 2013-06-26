@@ -7,17 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		428813251760B8660014984A /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130A1760B8660014984A /* bg.png */; };
-		428813261760B8660014984A /* centerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130B1760B8660014984A /* centerButton.png */; };
-		428813271760B8660014984A /* icon0.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130C1760B8660014984A /* icon0.png */; };
-		428813281760B8660014984A /* icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130D1760B8660014984A /* icon1.png */; };
-		428813291760B8660014984A /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130E1760B8660014984A /* icon2.png */; };
-		4288132A1760B8660014984A /* icon3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4288130F1760B8660014984A /* icon3.png */; };
-		4288132B1760B8660014984A /* icon4.png in Resources */ = {isa = PBXBuildFile; fileRef = 428813101760B8660014984A /* icon4.png */; };
-		4288132C1760B8660014984A /* icon5.png in Resources */ = {isa = PBXBuildFile; fileRef = 428813111760B8660014984A /* icon5.png */; };
-		4288132D1760B8660014984A /* icon6.png in Resources */ = {isa = PBXBuildFile; fileRef = 428813121760B8660014984A /* icon6.png */; };
-		4288132E1760B8660014984A /* icon7.png in Resources */ = {isa = PBXBuildFile; fileRef = 428813131760B8660014984A /* icon7.png */; };
-		4288132F1760B8660014984A /* segment.png in Resources */ = {isa = PBXBuildFile; fileRef = 428813141760B8660014984A /* segment.png */; };
 		428813301760B8660014984A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 428813151760B8660014984A /* InfoPlist.strings */; };
 		428813311760B8660014984A /* SMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 428813171760B8660014984A /* SMViewController.xib */; };
 		428813321760B8660014984A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 428813191760B8660014984A /* main.m */; };
@@ -32,17 +21,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4288130A1760B8660014984A /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
-		4288130B1760B8660014984A /* centerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = centerButton.png; sourceTree = "<group>"; };
-		4288130C1760B8660014984A /* icon0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon0.png; sourceTree = "<group>"; };
-		4288130D1760B8660014984A /* icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon1.png; sourceTree = "<group>"; };
-		4288130E1760B8660014984A /* icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon2.png; sourceTree = "<group>"; };
-		4288130F1760B8660014984A /* icon3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon3.png; sourceTree = "<group>"; };
-		428813101760B8660014984A /* icon4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon4.png; sourceTree = "<group>"; };
-		428813111760B8660014984A /* icon5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon5.png; sourceTree = "<group>"; };
-		428813121760B8660014984A /* icon6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon6.png; sourceTree = "<group>"; };
-		428813131760B8660014984A /* icon7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon7.png; sourceTree = "<group>"; };
-		428813141760B8660014984A /* segment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = segment.png; sourceTree = "<group>"; };
 		428813161760B8660014984A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		428813181760B8660014984A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SMViewController.xib; sourceTree = "<group>"; };
 		428813191760B8660014984A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -81,7 +59,6 @@
 		428813081760B8660014984A /* SMWheelControlSample */ = {
 			isa = PBXGroup;
 			children = (
-				428813091760B8660014984A /* assets */,
 				428813371760B8DE0014984A /* Supporting Files */,
 				4288131C1760B8660014984A /* SMWheelControl */,
 				428813171760B8660014984A /* SMViewController.xib */,
@@ -91,24 +68,6 @@
 				428813221760B8660014984A /* SMViewController.m */,
 			);
 			path = SMWheelControlSample;
-			sourceTree = "<group>";
-		};
-		428813091760B8660014984A /* assets */ = {
-			isa = PBXGroup;
-			children = (
-				4288130A1760B8660014984A /* bg.png */,
-				4288130B1760B8660014984A /* centerButton.png */,
-				4288130C1760B8660014984A /* icon0.png */,
-				4288130D1760B8660014984A /* icon1.png */,
-				4288130E1760B8660014984A /* icon2.png */,
-				4288130F1760B8660014984A /* icon3.png */,
-				428813101760B8660014984A /* icon4.png */,
-				428813111760B8660014984A /* icon5.png */,
-				428813121760B8660014984A /* icon6.png */,
-				428813131760B8660014984A /* icon7.png */,
-				428813141760B8660014984A /* segment.png */,
-			);
-			path = assets;
 			sourceTree = "<group>";
 		};
 		4288131C1760B8660014984A /* SMWheelControl */ = {
@@ -211,17 +170,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				428813251760B8660014984A /* bg.png in Resources */,
-				428813261760B8660014984A /* centerButton.png in Resources */,
-				428813271760B8660014984A /* icon0.png in Resources */,
-				428813281760B8660014984A /* icon1.png in Resources */,
-				428813291760B8660014984A /* icon2.png in Resources */,
-				4288132A1760B8660014984A /* icon3.png in Resources */,
-				4288132B1760B8660014984A /* icon4.png in Resources */,
-				4288132C1760B8660014984A /* icon5.png in Resources */,
-				4288132D1760B8660014984A /* icon6.png in Resources */,
-				4288132E1760B8660014984A /* icon7.png in Resources */,
-				4288132F1760B8660014984A /* segment.png in Resources */,
 				428813301760B8660014984A /* InfoPlist.strings in Resources */,
 				428813311760B8660014984A /* SMViewController.xib in Resources */,
 				428813361760B8660014984A /* SMWheelControl-Info.plist in Resources */,
