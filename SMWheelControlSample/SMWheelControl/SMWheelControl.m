@@ -13,7 +13,7 @@ static const CGFloat kMinDistanceFromCenter = 30.0;
 static const CGFloat kMaxVelocity = 20.0;
 static const CGFloat kSMDecelerationMultiplier = 0.97;
 static const CGFloat kMinDeceleration = 0.1;
-static const CGFloat kSMSnappingAngleThreshold = 0.01;
+static const CGFloat kSMSnappingAngleThreshold = 0.001;
 static const CGFloat kSMAngleDeltaThreshold = 0.1;
 static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 
@@ -243,13 +243,9 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     
-    if (_snappingTargetAngle > M_PI) {
-        _snappingTargetAngle -= 2.0 * M_PI;
-    } else if (_snappingTargetAngle < -M_PI) {
-        _snappingTargetAngle += 2.0 * M_PI;
-    }
+    CGFloat difference = atan2(sin(_snappingTargetAngle - currentAngle), cos(_snappingTargetAngle - currentAngle));
     
-    if (fabsf(currentAngle - _snappingTargetAngle) <= kSMSnappingAngleThreshold) {
+    if (fabsf(difference) <= kSMSnappingAngleThreshold) {
         [self endSnapping];
     } else {
         currentAngle += _snappingStep;
