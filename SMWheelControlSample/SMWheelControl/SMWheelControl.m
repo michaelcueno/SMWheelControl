@@ -82,6 +82,8 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 
     self.sliceContainer.userInteractionEnabled = NO;
     [self addSubview:self.sliceContainer];
+    
+    [self checkForSlicesInZoomZone];
 }
 
 
