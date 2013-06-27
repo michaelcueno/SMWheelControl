@@ -16,6 +16,7 @@ static const CGFloat kMinDeceleration = 0.1;
 static const CGFloat kSMSnappingAngleThreshold = 0.001;
 static const CGFloat kSMAngleDeltaThreshold = 0.1;
 static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
+static const CGFloat kSMZoomZoneThreshold = 1.50f;
 
 @interface SMWheelControl ()
 
@@ -158,6 +159,8 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
     if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
         [self.delegate wheel:self didRotateByAngle:(angleDelta)];
     }
+    
+    [self checkForSlicesInZoomZone];
 
     return YES;
 }
@@ -212,6 +215,8 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
         if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
             [self.delegate wheel:self didRotateByAngle:-angle];
         }
+        
+        [self checkForSlicesInZoomZone];
     }
 }
 
@@ -254,6 +259,8 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
         if ([self.delegate respondsToSelector:@selector(wheel:didRotateByAngle:)]) {
             [self.delegate wheel:self didRotateByAngle:_snappingStep];
         }
+        
+        [self checkForSlicesInZoomZone];
     }
 }
 
@@ -327,6 +334,25 @@ static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
     [_inertiaDisplayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
+- (void)checkForSlicesInZoomZone
+{
+    CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
+    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    CGFloat radiansPerSlice = (2.0 * M_PI) / numberOfSlices;
+    
+    for (NSUInteger i = 0; i < numberOfSlices; i++) {
+        CGFloat sliceAngleRad = 0;
+        sliceAngleRad = fmod((currentAngle + fmod((radiansPerSlice * i), M_PI * 2)), M_PI * 2);
+        
+        CGFloat diff = atan2(sin(sliceAngleRad), cos(sliceAngleRad));;
+        
+        if (fabsf(diff) < kSMZoomZoneThreshold) {
+            if ([self.delegate respondsToSelector:@selector(wheel:sliceAtIndex:isInZoomZoneWithDeltaAngle:)]) {
+                [self.delegate wheel:self sliceAtIndex:i isInZoomZoneWithDeltaAngle:diff];
+            }
+        }
+    }
+}
 
 - (CGFloat)velocity
 {

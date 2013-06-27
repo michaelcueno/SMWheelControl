@@ -16,5 +16,6 @@
 - (void)wheelDidEndDecelerating:(SMWheelControl *)wheel;
 - (void)wheel:(SMWheelControl *)wheel didRotateByAngle:(CGFloat)angle;
 - (void)wheel:(SMWheelControl *)wheel didTapOnSliceAtIndex:(NSUInteger)index;
+- (void)wheel:(SMWheelControl *)wheel sliceAtIndex:(NSUInteger)index isInZoomZoneWithDeltaAngle:(CGFloat)deltaAngle;
 
 @end
