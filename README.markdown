@@ -68,8 +68,14 @@ You can also implement the (hopefully self-explanatory) methods provided by `SMW
 - (void)wheel:(SMWheelControl *)wheel didTapOnSliceAtIndex:(NSUInteger)index;
 ```
 # Authors
+
+The library is based on the work of
 * Cesare Rocchi (@_funkyboy)
-* Simone Civetta (@viteinfinite)
+
+and currently developed by
+* Simone Civetta (@viteinfinite) 
+* Martin Moizard (@MartinMoizard)
+
 
 # License
 * [BSD 3-Clause](http://opensource.org/licenses/BSD-3-Clause)
