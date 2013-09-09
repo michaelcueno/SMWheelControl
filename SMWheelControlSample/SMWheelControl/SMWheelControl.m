@@ -100,7 +100,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 #pragma mark - Touches
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
-{
+{    
     switch (_status) {
         case SMWheelControlStatusIdle:
             _detectingTap = YES;
@@ -138,6 +138,10 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 - (BOOL)continueTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event
 {
     _detectingTap = NO;
+ 
+    if (self.rotationDisabled) {
+        return NO;
+    }
     
     CGPoint point = [touch locationInView:self];
 
@@ -323,7 +327,6 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     }
 
     if (currentAngle != _snappingTargetAngle) {
-        CGFloat velocityMultiplier = animated ? kSMDefaultSelectionVelocityMultiplier : 1.0;
         _snappingStep = (_snappingTargetAngle - currentAngle) / kSMDefaultSelectionVelocityMultiplier;
     } else {
         return;

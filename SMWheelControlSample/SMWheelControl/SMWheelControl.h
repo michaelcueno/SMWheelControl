@@ -24,6 +24,7 @@ typedef enum {
 @property (nonatomic, weak) id <SMWheelControlDataSource> dataSource;
 @property (nonatomic, assign) int selectedIndex;
 @property (nonatomic, assign, readonly) SMWheelControlStatus status;
+@property (nonatomic, assign) BOOL rotationDisabled;
 
 - (id)initWithFrame:(CGRect)frame;
 - (void)reloadData;
