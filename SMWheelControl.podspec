@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary      = 'SMWheelControl is an iOS component allowing the selection of an item from a 360° spinning wheel.'
   s.author = {
     'Cesare Rocchi' => '@_funkyboy',
-    'Simone Civetta' => '@viteinfinite'
+    'Simone Civetta' => '@viteinfinite',
     'Xebia IT Architects' => 'mobile@xebia.fr'
   }
   s.source = {
