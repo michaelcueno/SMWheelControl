@@ -1,3 +1,5 @@
 .idea/
 *.xcuserdatad
 
+docset
+html

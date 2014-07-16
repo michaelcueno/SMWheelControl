@@ -1,6 +1,5 @@
 //
 //  SMWheelControl.m
-//  RotaryWheelProject
 //
 //  Created by cesarerocchi on 2/10/12.
 //  Copyright (c) 2012 studiomagnolia.com. All rights reserved.
@@ -18,33 +17,31 @@ static const CGFloat kSMAngleDeltaThreshold = 0.1;
 static const CGFloat kSMDefaultSelectionVelocityMultiplier = 10.0;
 static const CGFloat kSMZoomZoneThreshold = 1.50f;
 
+
 @interface SMWheelControl ()
 
 @property (nonatomic, strong) UIView *sliceContainer;
+
 @property (nonatomic, assign) SMWheelControlStatus status;
 
 @end
 
+
 @implementation SMWheelControl {
     BOOL _detectingTap;
-    
     CGFloat _animatingVelocity;
-    
     CADisplayLink *_decelerationDisplayLink;
     CADisplayLink *_inertiaDisplayLink;
-    
     CFTimeInterval _startTouchTime;
     CFTimeInterval _endTouchTime;
-
     CGFloat _startTouchAngle;
     CGFloat _previousTouchAngle;
     CGFloat _currentTouchAngle;
-    
     CGFloat _snappingTargetAngle;
     CGFloat _snappingStep;
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     if ((self = [super initWithFrame:frame])) {
 		
