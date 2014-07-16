@@ -60,7 +60,7 @@ typedef enum {
  *  @param selectedIndex The index that should be selected
  *  @param animated      Animates the selection
  */
-- (void)setSelectedIndex:(int)selectedIndex animated:(BOOL)animated;
+- (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated;
 
 /**
  *  Invalidates the display link
