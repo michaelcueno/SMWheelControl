@@ -239,7 +239,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
 
-    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
     int closestSlice = round(currentAngle / radiansPerSlice);
 
@@ -271,7 +271,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 - (void)endSnapping
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
-    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
     CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
     int index = (lroundf((- (M_PI / 2) + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
@@ -299,7 +299,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     if ([self.delegate respondsToSelector:@selector(wheel:didTapOnSliceAtIndex:)]) {
         
         CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
-        int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+        NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
         CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
         CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
         int index = (lroundf((angle + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
@@ -311,7 +311,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 
 - (void)selectSliceAtIndex:(NSInteger)index animated:(BOOL)animated
 {
-    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
     
@@ -339,7 +339,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 - (void)checkForSlicesInZoomZone
 {
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
-    int numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
+    NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat radiansPerSlice = (2.0 * M_PI) / numberOfSlices;
     
     for (NSUInteger i = 0; i < numberOfSlices; i++) {
@@ -400,12 +400,12 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 
 #pragma mark - selectedIndex Setter
 
-- (void)setSelectedIndex:(int)selectedIndex animated:(BOOL)animated
+- (void)setSelectedIndex:(NSUInteger)selectedIndex animated:(BOOL)animated
 {
     [self selectSliceAtIndex:-selectedIndex animated:animated];
 }
 
-- (void)setSelectedIndex:(int)selectedIndex
+- (void)setSelectedIndex:(NSUInteger)selectedIndex
 {
     [self setSelectedIndex:selectedIndex animated:NO];
 }
