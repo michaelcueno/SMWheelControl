@@ -5,7 +5,7 @@ The code is loosely based on the tutorial "How To Create a Rotating Wheel Contro
 
 Sample screenshot:
 
-![The final result](https://github.com/viteinfinite/SMWheelControl/blob/master/final.png?raw=true "The final result")
+![The final result](sample.png "The final result")
 
 # Usage
 
@@ -69,12 +69,8 @@ You can also implement the (hopefully self-explanatory) methods provided by `SMW
 ```
 # Authors
 
-The library is based on the work of
 * Cesare Rocchi (@_funkyboy)
-
-and currently developed by
 * Simone Civetta (@viteinfinite) 
-* Martin Moizard (@MartinMoizard)
 
 
 # License
