@@ -276,6 +276,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
     int index = (lroundf((- (M_PI / 2) + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
     
+    
     [self didEndRotationOnSliceAtIndex:index];
     
     [_inertiaDisplayLink invalidate];

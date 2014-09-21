@@ -12,5 +12,6 @@
 @interface SMViewController : UIViewController<SMWheelControlDelegate, SMWheelControlDataSource>
 
 @property (nonatomic, weak) IBOutlet UILabel *valueLabel;
+@property (nonatomic, weak) IBOutlet UIView *wheelContainer;
 
 @end

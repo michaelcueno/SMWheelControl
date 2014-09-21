@@ -17,25 +17,20 @@
 
 @implementation SMViewController
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Release any cached data, images, etc that aren't in use.
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
-    SMWheelControl *wheel = [[SMWheelControl alloc] initWithFrame:CGRectMake(0, 0, 320, 320)];
+    SMWheelControl *wheel = [[SMWheelControl alloc] initWithFrame:self.wheelContainer.bounds];
     [wheel addTarget:self action:@selector(wheelDidChangeValue:) forControlEvents:UIControlEventValueChanged];
+    [wheel insertSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"WheelBackground"]] atIndex:0];
     wheel.delegate = self;
     wheel.dataSource = self;
     [wheel reloadData];
 
-    [self.view addSubview:wheel];
+    [self.wheelContainer addSubview:wheel];
     self.wheel = wheel;
 }
 
@@ -70,8 +65,12 @@
 
 - (void)wheelDidChangeValue:(id)sender
 {
-    self.valueLabel.text = [NSString stringWithFormat:@"%d", self.wheel.selectedIndex];
+    self.valueLabel.text = [NSString stringWithFormat:@"Selected index: %d", self.wheel.selectedIndex];
 }
 
+- (CGFloat)snappingAngleForWheel:(id)sender
+{
+    return M_PI / 2;
+}
 
 @end
