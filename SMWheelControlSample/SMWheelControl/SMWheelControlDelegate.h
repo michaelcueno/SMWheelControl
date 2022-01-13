@@ -49,4 +49,9 @@
  */
 - (void)wheel:(SMWheelControl *)wheel sliceAtIndex:(NSUInteger)index isInZoomZoneWithDeltaAngle:(CGFloat)deltaAngle;
 
+/**
+ * Called durtion rotation to tell delegate that the selected index has changed 
+ */
+- (void)wheel:(SMWheelControl *)wheel didChangeIndex:(NSUInteger)index;
+
 @end

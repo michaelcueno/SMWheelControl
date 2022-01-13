@@ -39,6 +39,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     CGFloat _currentTouchAngle;
     CGFloat _snappingTargetAngle;
     CGFloat _snappingStep;
+    NSUInteger _inFlightIndex;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -83,7 +84,6 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     [self checkForSlicesInZoomZone];
 }
 
-
 - (void)didEndRotationOnSliceAtIndex:(NSUInteger)index
 {
     _selectedIndex = index;
@@ -92,7 +92,6 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     }
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
-
 
 #pragma mark - Touches
 
@@ -131,7 +130,6 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     return YES;
 }
 
-
 - (BOOL)continueTrackingWithTouch:(UITouch*)touch withEvent:(UIEvent*)event
 {
     _detectingTap = NO;
@@ -164,10 +162,21 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     }
     
     [self checkForSlicesInZoomZone];
+    [self sendIndexChangedIfSo];
 
     return YES;
 }
 
+- (void)sendIndexChangedIfSo
+{
+    int currentIndex = [self calcuateCurrentIndex];
+    if (currentIndex != _inFlightIndex) {
+        _inFlightIndex = currentIndex;
+        if ([self.delegate respondsToSelector:@selector(wheel:didChangeIndex:)]) {
+            [self.delegate wheel:self didChangeIndex:currentIndex];
+        }
+    }
+}
 
 - (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
@@ -220,6 +229,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
         }
         
         [self checkForSlicesInZoomZone];
+        [self sendIndexChangedIfSo];
     }
 }
 
@@ -253,7 +263,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
     
     CGFloat difference = atan2(sin(_snappingTargetAngle - currentAngle), cos(_snappingTargetAngle - currentAngle));
     
-    if (fabsf(difference) <= kSMSnappingAngleThreshold) {
+    if (fabs(difference) <= kSMSnappingAngleThreshold) {
         [self endSnapping];
     } else {
         currentAngle += _snappingStep;
@@ -268,15 +278,21 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 }
 
 
-- (void)endSnapping
+- (int)calcuateCurrentIndex
 {
+    if (self.delegate == nil) {
+        return 0;
+    }
     CGFloat currentAngle = atan2f(self.sliceContainer.transform.b, self.sliceContainer.transform.a);
     NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
     CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
     CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
-    int index = (lroundf((- (M_PI / 2) + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
-    
-    
+    return (int)(lroundf((- (M_PI / 2) + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
+}
+
+- (void)endSnapping
+{
+    int index = [self calcuateCurrentIndex];
     [self didEndRotationOnSliceAtIndex:index];
     
     [_inertiaDisplayLink invalidate];
@@ -303,7 +319,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
         NSUInteger numberOfSlices = [self.dataSource numberOfSlicesInWheel:self];
         CGFloat radiansPerSlice = 2.0 * M_PI / numberOfSlices;
         CGFloat snappingAngle = [self.dataSource respondsToSelector:@selector(snappingAngleForWheel:)] ? [self.dataSource snappingAngleForWheel:self] : 0.0;
-        int index = (lroundf((angle + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
+        int index = (int)(lroundf((angle + snappingAngle - currentAngle) / radiansPerSlice) + numberOfSlices) % numberOfSlices;
         
         [self.delegate wheel:self didTapOnSliceAtIndex:index];
     }
@@ -349,7 +365,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
         
         CGFloat diff = atan2(sin(sliceAngleRad), cos(sliceAngleRad));;
         
-        if (fabsf(diff) < kSMZoomZoneThreshold) {
+        if (fabs(diff) < kSMZoomZoneThreshold) {
             if ([self.delegate respondsToSelector:@selector(wheel:sliceAtIndex:isInZoomZoneWithDeltaAngle:)]) {
                 [self.delegate wheel:self sliceAtIndex:i isInZoomZoneWithDeltaAngle:diff];
             }
@@ -361,7 +377,7 @@ static const CGFloat kSMZoomZoneThreshold = 1.50f;
 {
     CGFloat velocity = 0.0;
 
-    if (_endTouchTime != _startTouchTime && fabsf(_previousTouchAngle - _currentTouchAngle) >= kSMAngleDeltaThreshold) {
+    if (_endTouchTime != _startTouchTime && fabs(_previousTouchAngle - _currentTouchAngle) >= kSMAngleDeltaThreshold) {
         velocity = (_previousTouchAngle - _currentTouchAngle) / (CGFloat)(_endTouchTime - _startTouchTime);
     }
 
